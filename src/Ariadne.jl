@@ -1,6 +1,7 @@
 module Ariadne
 
 import Base: size, getindex, setindex!
+import Base: length, iterate, get
 import Base: show, isless, minimum, maximum
 
 using Random
@@ -15,13 +16,18 @@ abstract type Theta <: Tesselation end
 abstract type Upsilon <: Tesselation end
 abstract type Zeta <: Tesselation end
 abstract type AbstractGrid{T<:Tesselation} <: AbstractMatrix{AbstractCell} end
+abstract type AbstractDistances{T<:AbstractCell} <: AbstractDict{T,Int} end
 
-export Grid,
-       binarytree!,
-       totxt,
-       topng
+export 
+    Grid,
+    aldousbroder!,
+    binarytree!,
+    dijkstra,
+    totxt,
+    topng
 
 include("./grids.jl")
 include("./algorithms.jl")
+include("./distances.jl")
 
 end # module

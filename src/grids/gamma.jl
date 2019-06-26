@@ -33,8 +33,34 @@ function topng(g::AbstractGrid{Gamma};
         for cell in g
             x1 = (colindex(cell) - 1) * cellsize
             y1 = (rowindex(cell) - 1) * cellsize
+            x2 = colindex(cell) * cellsize
+            y2 = rowindex(cell) * cellsize
+            if mode == :backgrounds
+                sethue("white")
+                setline(1.0)
+                rect(x1, y1, cellsize, cellsize, :fill)
+                rect(x1, y1, cellsize, cellsize, :stroke)
+            else
+                sethue("black")
+                setline(1.0)
+                if isnothing(north(g, cell))
+                    line(Point(x1, y1), Point(x2, y1), :stroke)
+                end
+                if isnothing(west(g, cell))
+                    line(Point(x1, y1), Point(x1, y2), :stroke)
+                end
+                if !islinked(cell, east(g, cell))
+                    line(Point(x2, y1), Point(x2, y2), :stroke)
+                end
+                if !islinked(cell, south(g, cell))
+                    line(Point(x1, y2), Point(x2, y2), :stroke)
+                end
+            end
         end
     end
+    finish()
+    preview()
+    return g
 end
 
 function contentsof(g::AbstractGrid{Gamma}, cell)
@@ -63,4 +89,5 @@ function totxt(g::AbstractGrid{Gamma})
         println(top)
         println(bottom)
     end
+    return g
 end    

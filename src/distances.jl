@@ -1,10 +1,10 @@
-struct Distances <: AbstractDistances
-    root::Cell
-    cells::Dict{Cell,Int}
+struct Distances{T<:AbstractCell} <: AbstractDistances{T}
+    root::T
+    cells::Dict{T,Int}
 end
 
-function Distances(root)
-    cells = Dict{Cell,Int}()
+function dijkstra(root)
+    cells = Dict{typeof(root),Int}()
     cells[root] = 0
     frontier = [root]
     while !isempty(frontier)
@@ -23,14 +23,15 @@ function Distances(root)
     return Distances(root, cells)
 end
 
-cells(d::AbstractDistances) = d.cells
+root(d::Distances) = d.root
+cells(d::Distances) = d.cells
 
-length(d::AbstractDistances) = length(cells(d))
+length(d::Distances) = length(cells(d))
 
-iterate(d::AbstractDistances) = iterate(cells(d))
-iterate(d::AbstractDistances, s) = iterate(cells(d))
+iterate(d::Distances) = iterate(cells(d))
+iterate(d::Distances, s) = iterate(cells(d), s)
 
-get(d::AbstractDistances, key, default) = get(cells(d), key, default)
+get(d::Distances, key, default) = get(cells(d), key, default)
 
-minimum(d::AbstractDistances) = first(findmin(cells(d)))
-maximum(d::AbstractDistances) = first(findmax(cells(d)))
+minimum(d::Distances) = first(findmin(cells(d)))
+maximum(d::Distances) = first(findmax(cells(d)))
