@@ -23,7 +23,7 @@ function backgroundcolorfor(g::AbstractGrid, cell::AbstractCell;
 end
 
 function topng(g::AbstractGrid{Gamma}; 
-    cellsize = 10, 
+    cellsize = 30, 
     out = "out.png", 
     modes = [:background, :walls])
     nrows, ncols = size(g)
@@ -33,19 +33,19 @@ function topng(g::AbstractGrid{Gamma};
     background("white")
     for mode in modes
         for cell in g
-            x1 = (colindex(cell) - 1) * cellsize + 0.5
-            y1 = (rowindex(cell) - 1) * cellsize + 0.5
-            x2 = colindex(cell) * cellsize + 0.5
-            y2 = rowindex(cell) * cellsize + 0.5
+            x1 = (colindex(cell) - 1) * cellsize
+            y1 = (rowindex(cell) - 1) * cellsize
+            x2 = colindex(cell) * cellsize
+            y2 = rowindex(cell) * cellsize
             if mode == :background
                 color = backgroundcolorfor(g, cell)
                 sethue(color)
-                setline(0.5)
+                setline(1.0)
                 rect(x1, y1, cellsize, cellsize, :fill)
                 rect(x1, y1, cellsize, cellsize, :stroke)
             else
                 sethue("black")
-                setline(0.5)
+                setline(1.5)
                 if isnothing(north(g, cell))
                     line(Point(x1, y1), Point(x2, y1), :stroke)
                 end
