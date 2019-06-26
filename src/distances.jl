@@ -1,9 +1,9 @@
-struct Distances{T<:AbstractCell} <: AbstractDistances{T}
+struct Distances{T} <: AbstractDistances{T}
     root::T
     cells::Dict{T,Int}
 end
 
-function Distances(root)
+function Distances(root::AbstractCell)
     cells = Dict{typeof(root),Int}()
     cells[root] = 0
     frontier = [root]
@@ -35,3 +35,19 @@ get(d::Distances, key, default) = get(cells(d), key, default)
 
 minimum(d::Distances) = first(findmin(cells(d)))
 maximum(d::Distances) = first(findmax(cells(d)))
+
+function pathto(d, goal)
+    current = goal
+    path = Distances(root(d), Dict{typeof(root(d)),Int}())
+    cells(path)[current] = d[current]
+    while current != root(d)
+        for link in links(current)
+            if d[link] < d[current]
+                cells(path)[link] = d[link]
+                current = link
+                break
+            end
+        end
+    end
+    return path
+end
