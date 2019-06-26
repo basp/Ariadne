@@ -3,7 +3,7 @@ struct Distances{T<:AbstractCell} <: AbstractDistances{T}
     cells::Dict{T,Int}
 end
 
-function dijkstra(root)
+function Distances(root)
     cells = Dict{typeof(root),Int}()
     cells[root] = 0
     frontier = [root]

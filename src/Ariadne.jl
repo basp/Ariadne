@@ -19,10 +19,10 @@ abstract type AbstractGrid{T<:Tesselation} <: AbstractMatrix{AbstractCell} end
 abstract type AbstractDistances{T<:AbstractCell} <: AbstractDict{T,Int} end
 
 export 
+    Distances,
     Grid,
     aldousbroder!,
     binarytree!,
-    dijkstra,
     totxt,
     topng
 
