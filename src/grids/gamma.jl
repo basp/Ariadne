@@ -2,7 +2,7 @@ mutable struct Grid <: AbstractGrid{:Γ}
     cells::Matrix{Cell}
 end
 
-Grid(nrows, ncols) =  cellmatrix(nrows, ncols) |> Grid                        
+Grid(nrows, ncols) = cellmatrix(nrows, ncols) |> Grid                        
 
 function neighbors(g::AbstractGrid{:Γ}, c)
     n = north(g, c)

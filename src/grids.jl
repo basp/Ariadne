@@ -16,11 +16,11 @@ Cell(rowidx, colidx) = Cell(rowidx, colidx, Set{Cell}())
 
 Maze(G) = Maze(G, nothing, nothing)
 
-rowidx(c) = c.rowidx
-colidx(c) = c.colidx
-links(c) = c.links
+rowidx(C) = C.rowidx
+colidx(C) = C.colidx
+links(C) = C.links
 
-show(io::IO, c::AbstractCell) = print(io, "($(rowidx(c)), $(colidx(c)))")
+show(io::IO, C::AbstractCell) = print(io, "($(rowidx(C)), $(colidx(C)))")
 
 cells(G::AbstractGrid) = G.cells
 cells(M::AbstractMaze) = cells(grid(M))
@@ -42,6 +42,8 @@ end
 iswrapped(x) = false
 iswrapped(M::AbstractMaze) = iswrapped(grid(M))
 
+islinked(::Nothing, _) = false
+islinked(_, ::Nothing) = false
 islinked(a, b) = b in links(a)
 
 function link!(a, b, reverse = true)
