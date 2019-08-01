@@ -8,9 +8,9 @@ function PolarGrid(ncircles; wrap = true)
     rowheight = 1 / ncircles
     rows[1] = [Cell(1, 1)]
     for row in 2:ncircles
-        radius = (row - 1) / ncircles # -1 for 1-based indices
-        circ = 2π * radius
-        prevcount = length(rows[row - 1]) # and again
+        radius = (row - 1) / ncircles       # -1 for 1-based indices
+        circ = 2π * radius                  # ...
+        prevcount = length(rows[row - 1])   # and again
         cellwidth = circ / prevcount
         ratio = round(Int, cellwidth / rowheight)
         ncells = prevcount * ratio
