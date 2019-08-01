@@ -53,32 +53,32 @@ function PolarGrid(ncircles; wrap = true)
     return PolarGrid(rows, wrap)
 end
 
-function Maze(G::AbstractGrid)
-    return Maze(G, nothing, nothing)
-end
+Maze(G) = Maze(G, nothing, nothing)
 
-rowidx(c::AbstractCell) = c.rowidx
-colidx(c::AbstractCell) = c.colidx
-links(c::AbstractCell) = c.links
+rowidx(c) = c.rowidx
+colidx(c) = c.colidx
+links(c) = c.links
+
+show(io::IO, c::AbstractCell) = print(io, "($(rowidx(c)), $(colidx(c)))")
 
 cells(G::AbstractGrid) = G.cells
 cells(M::AbstractMaze) = cells(grid(M))
 
-grid(M::AbstractMaze) = M.grid
-distances(M::AbstractMaze) = M.distances
-path(M::AbstractMaze) = M.path
+grid(M) = M.grid
+distances(M) = M.distances
+path(M) = M.path
 
-function setdistances(M::AbstractMaze, D) 
+function setdistances(M, D) 
     M.distances = D
     return M
 end
 
-function setpath(M::AbstractMaze, P)
+function setpath(M, P)
     M.path = P
     return M
 end
 
-iswrapped(G::AbstractGrid) = false
+iswrapped(x) = false
 iswrapped(M::AbstractMaze) = iswrapped(grid(M))
 
 islinked(a, b) = b in links(a)
@@ -105,12 +105,11 @@ function getindex(g::AbstractGrid, r, c)
     return getindex(cells(g), r, c)
 end
 
-north(g::AbstractGrid, c) = g[rowidx(c) - 1, colidx(c)]
-south(g::AbstractGrid, c) = g[rowidx(c) + 1, colidx(c)]
-west(g::AbstractGrid, c) = g[rowidx(c), colidx(c) - 1]
-east(g::AbstractGrid, c) = g[rowidx(c), colidx(c) + 1]
-
-show(io::IO, c::AbstractCell) = print(io, "($(rowidx(c)), $(colidx(c)))")
+north(g, c) = g[rowidx(c) - 1, colidx(c)]
+south(g, c) = g[rowidx(c) + 1, colidx(c)]
+west(g, c) = g[rowidx(c), colidx(c) - 1]
+east(g, c) = g[rowidx(c), colidx(c) + 1]
 
 include("./grids/gamma.jl")
 include("./grids/theta.jl")
+include("./grids/sigma.jl")

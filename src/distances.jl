@@ -36,6 +36,8 @@ get(D::Distances, key, default) = get(cells(D), key, default)
 minimum(D::Distances) = first(findmin(cells(D)))
 maximum(D::Distances) = first(findmax(cells(D)))
 
+dijkstra(root) = root |> Distances
+
 function pathto(D, goal)
     current = goal
     path = Distances(root(D), Dict{typeof(root(D)),Int}())
@@ -50,4 +52,16 @@ function pathto(D, goal)
         end
     end
     return path
+end
+
+function dijkstra!(M, root)
+    D = dijkstra(root)
+    setdistances(M, D)
+    return M
+end
+
+function pathto!(M, D, goal)
+    P = pathto(D, goal)
+    setpath(M, P)
+    return
 end

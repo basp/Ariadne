@@ -66,8 +66,12 @@ function topng(g::AbstractGrid{:Γ};
     return g
 end
 
-function contentsof(g::AbstractGrid{:Γ}, cell)
-    return " "
+contentsof(g::AbstractGrid{:Γ}) = repeat(" ", 2)
+
+function contentsof(g::AbstractMaze{:Γ}, cell)
+    isnothing(distances(g)) && return repeat(" ", 2)
+    haskey(distances(g), cell) || return repeat(" ", 2)
+    return lpad(string(distances(g)[cell], base=16), 2)
 end
 
 function totxt(g::AbstractGrid{:Γ})
@@ -82,7 +86,7 @@ function totxt(g::AbstractGrid{:Γ})
         top = "|"
         bottom = "+"
         for cell in row
-            body = " $(rendercontents(cell)) "
+            body = "$(rendercontents(cell)) "
             corner = "+"
             ebound = islinked(cell, east(g, cell)) ? " " : "|"
             sbound = islinked(cell, south(g, cell)) ? "   " : "---"

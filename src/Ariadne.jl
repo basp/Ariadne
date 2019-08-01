@@ -8,7 +8,6 @@ import Base: show, isless, minimum, maximum
 
 export 
     Cell,
-    Distances, 
     Grid,
     HexGrid,
     Maze,
@@ -17,8 +16,12 @@ export
     
     aldousbroder!,
     binarytree!,
+    dijkstra,
+    dijkstra!,
     distances,
     path,
+    pathto,
+    pathto!,
     setdistances,
     setpath,
     totxt
