@@ -22,7 +22,7 @@ function backgroundcolorfor(g::AbstractGrid, cell::AbstractCell;
     return 1.0, 1.0, 1.0
 end
 
-function topng(g::AbstractGrid{Gamma}; 
+function topng(g::AbstractGrid{:Γ}; 
     cellsize = 30, 
     out = "out.png", 
     modes = [:background, :walls])
@@ -33,10 +33,10 @@ function topng(g::AbstractGrid{Gamma};
     background("white")
     for mode in modes
         for cell in g
-            x1 = (colindex(cell) - 1) * cellsize
-            y1 = (rowindex(cell) - 1) * cellsize
-            x2 = colindex(cell) * cellsize
-            y2 = rowindex(cell) * cellsize
+            x1 = (colidx(cell) - 1) * cellsize
+            y1 = (rowidx(cell) - 1) * cellsize
+            x2 = colidx(cell) * cellsize
+            y2 = rowidx(cell) * cellsize
             if mode == :background
                 color = backgroundcolorfor(g, cell)
                 sethue(color)
@@ -66,11 +66,11 @@ function topng(g::AbstractGrid{Gamma};
     return g
 end
 
-function contentsof(g::AbstractGrid{Gamma}, cell)
+function contentsof(g::AbstractGrid{:Γ}, cell)
     return " "
 end
 
-function totxt(g::AbstractGrid{Gamma})
+function totxt(g::AbstractGrid{:Γ})
     nrows, ncols = size(g)
     print("+")
     for c in 1:ncols

@@ -23,27 +23,27 @@ function Distances(root::AbstractCell)
     return Distances(root, cells)
 end
 
-root(d::Distances) = d.root
-cells(d::Distances) = d.cells
+root(D::Distances) = D.root
+cells(D::Distances) = D.cells
 
-length(d::Distances) = length(cells(d))
+length(D::Distances) = length(cells(D))
 
-iterate(d::Distances) = iterate(cells(d))
-iterate(d::Distances, s) = iterate(cells(d), s)
+iterate(D::Distances) = iterate(cells(D))
+iterate(D::Distances, s) = iterate(cells(D), s)
 
-get(d::Distances, key, default) = get(cells(d), key, default)
+get(D::Distances, key, default) = get(cells(D), key, default)
 
-minimum(d::Distances) = first(findmin(cells(d)))
-maximum(d::Distances) = first(findmax(cells(d)))
+minimum(D::Distances) = first(findmin(cells(D)))
+maximum(D::Distances) = first(findmax(cells(D)))
 
-function pathto(d, goal)
+function pathto(D, goal)
     current = goal
-    path = Distances(root(d), Dict{typeof(root(d)),Int}())
-    cells(path)[current] = d[current]
-    while current != root(d)
+    path = Distances(root(D), Dict{typeof(root(D)),Int}())
+    cells(path)[current] = D[current]
+    while current != root(D)
         for link in links(current)
-            if d[link] < d[current]
-                cells(path)[link] = d[link]
+            if D[link] < D[current]
+                cells(path)[link] = D[link]
                 current = link
                 break
             end

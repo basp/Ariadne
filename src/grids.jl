@@ -1,37 +1,41 @@
 mutable struct Cell <: AbstractCell
-    rowindex::Int
-    colindex::Int  
+    rowidx::Int
+    colidx::Int
     links::Set{Cell}
 end
 
-mutable struct Grid <: AbstractGrid{Gamma}
+mutable struct Grid <: AbstractGrid{:Γ}
     cells::Matrix{Cell}
 end
 
-mutable struct PolarGrid <: AbstractGrid{Theta}
+mutable struct TriangleGrid <: AbstractGrid{:Δ}
+    cells::Matrix{Cell}
+end
+
+mutable struct HexGrid <: AbstractGrid{:Σ}
+    cells::Matrix{Cell}
+end
+
+mutable struct PolarGrid <: AbstractGrid{:Θ}
     rows::Vector{Vector{Cell}}
     wrap::Bool
 end
 
-mutable struct HexGrid <: AbstractGrid{Sigma}
-    cells::Matrix{Cell}
-end
-
-mutable struct TriangleGrid <: AbstractGrid{Delta}
-    cells::Matrix{Cell}
-end
-
-mutable struct Maze{T<:Tesselation} <: AbstractMaze{T}
+mutable struct Maze{T} <: AbstractMaze{T}
     grid::AbstractGrid{T}
     distances::Union{AbstractDistances,Nothing}
     path::Union{AbstractDistances,Nothing}
 end
 
-Cell(rowindex, colindex) = Cell(rowindex, colindex, Set{Cell}())
+__cellmatrix(nrows, ncols) = [Cell(r, c) for r in 1:nrows, c in 1:ncols]
 
-_cellmatrix(nrows, ncols) = [Cell(r, c) for r in 1:nrows, c in 1:ncols]
+Cell(rowidx, colidx) = Cell(rowidx, colidx, Set{Cell}())
 
-Grid(nrows, ncols) = _cellmatrix(nrows, ncols) |> Grid
+Grid(nrows, ncols) =  __cellmatrix(nrows, ncols) |> Grid                        
+
+TriangleGrid(nrows, ncols) = __cellmatrix(nrows, ncols) |> TriangleGrid
+
+HexGrid(nrows, ncols) = __cellmatrix(nrows, ncols) |> HexGrid
 
 function PolarGrid(ncircles; wrap = true)
     rows = [Cell[] for r in 1:ncircles]
@@ -42,69 +46,71 @@ function PolarGrid(ncircles; wrap = true)
         circ = 2π * radius
         prevcount = length(rows[row - 1])
         cellwidth = circ / prevcount
-        ratio = round(cellwidth / rowheight) |> Int
+        ratio = round(Int, cellwidth / rowheight)
         ncells = prevcount * ratio
         rows[row] = [Cell(row, col) for col in 1:ncells]
     end
     return PolarGrid(rows, wrap)
 end
 
-HexGrid(nrows, ncols) = _cellmatrix(nrows, ncols) |> HexGrid
-
-TriangleGrid(nrows, ncols) = _cellmatrix(nrows, ncols) |> TriangleGrid
-
-function Maze(g::AbstractGrid{T}) where {T<:Tesselation}
-    return Maze{T}(g, nothing, nothing)
+function Maze(G::AbstractGrid)
+    return Maze(G, nothing, nothing)
 end
 
-rowindex(c::AbstractCell) = c.rowindex
-colindex(c::AbstractCell) = c.colindex
-
-cells(g::AbstractGrid) = g.cells
-cells(m::AbstractMaze) = cells(grid(m))
-
-links(::Nothing) = Set{Cell}()
+rowidx(c::AbstractCell) = c.rowidx
+colidx(c::AbstractCell) = c.colidx
 links(c::AbstractCell) = c.links
 
-iswrapped(g::PolarGrid) = g.wrap
-iswrapped(g::AbstractGrid) = false
+cells(G::AbstractGrid) = G.cells
+cells(M::AbstractMaze) = cells(grid(M))
 
-grid(m::AbstractMaze) = m.grid
-distances(m::AbstractMaze) = m.distances
-path(m::AbstractMaze) = m.path
+grid(M::AbstractMaze) = M.grid
+distances(M::AbstractMaze) = M.distances
+path(M::AbstractMaze) = M.path
 
-function setdistances(m::AbstractMaze, v::AbstractDistances)
-    m.distances = v
-    return m
+function setdistances(M::AbstractMaze, D) 
+    M.distances = D
+    return M
 end
 
-function setpath(m::AbstractMaze, v::AbstractDistances)
-    m.path = v
-    return m
+function setpath(M::AbstractMaze, P)
+    M.path = P
+    return M
 end
 
-islinked(::Nothing, _) = false
-islinked(_, ::Nothing) = false
+iswrapped(G::AbstractGrid) = false
+iswrapped(M::AbstractMaze) = iswrapped(grid(M))
+
 islinked(a, b) = b in links(a)
 
-function link!(a, b; reverse = true)
-    push!(a.links, b)
-    reverse && link!(b, a, reverse = false)
+function link!(a, b, reverse = true)
+    push!(links(a), b)
+    reverse && link!(b, a, false)
     return a
 end
 
-function unlink!(a, b; reverse = true)
-    pop!(a.links, b)
-    reverse && unlink!(b, a, reverse = false)
+function unlink!(a, b, reverse = true)
+    pop!(links(a), b)
+    reverse && unlink!(b, a, false)
     return a
 end
 
-isdeadend(c::AbstractCell) = length(links(c)) == 1
-isunlinked(c::AbstractCell) = isempty(links(c))
+size(g::AbstractGrid) = size(cells(g))
 
-deadends(g::AbstractGrid) = filter(isdeadend, g)
-unlinked(g::AbstractGrid) = filter(isunlinked, g)
+function getindex(g::AbstractGrid, r, c)
+    nrows, ncols = size(g)
+    roob = r < 1 || r > nrows
+    coob = c < 1 || c > ncols
+    (roob || coob) && return nothing
+    return getindex(cells(g), r, c)
+end
 
-show(io::IO, c::AbstractCell) = print(io, "($(rowindex(c)), $(colindex(c)))")
-    
+north(g::AbstractGrid, c) = g[rowidx(c) - 1, colidx(c)]
+south(g::AbstractGrid, c) = g[rowidx(c) + 1, colidx(c)]
+west(g::AbstractGrid, c) = g[rowidx(c), colidx(c) - 1]
+east(g::AbstractGrid, c) = g[rowidx(c), colidx(c) + 1]
+
+show(io::IO, c::AbstractCell) = print(io, "($(rowidx(c)), $(colidx(c)))")
+
 include("./grids/gamma.jl")
+include("./grids/theta.jl")
