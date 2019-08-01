@@ -17,5 +17,5 @@ function neighbors(g::AbstractGrid{Gamma}, c)
     s = south(g, c)
     w = west(g, c)
     e = east(g, c)
-    return filter(x -> !isnothing(x), [n, e, s, w])
+    return filter(!isnothing, [n, e, s, w])
 end 

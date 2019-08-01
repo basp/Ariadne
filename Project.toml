@@ -1,6 +1,6 @@
 name = "Ariadne"
 uuid = "c68e8cc0-7228-11e9-2856-29602c797aca"
-authors = ["Bas Pennings <bas.pennings@asml.com>"]
+authors = ["Bas Pennings <baspster@gmail.com>"]
 version = "0.1.0"
 
 [deps]

@@ -21,7 +21,7 @@ mutable struct TriangleGrid <: AbstractGrid{Delta}
     cells::Matrix{Cell}
 end
 
-mutable struct Maze{T} <: AbstractMaze{T}
+mutable struct Maze{T<:Tesselation} <: AbstractMaze{T}
     grid::AbstractGrid{T}
     distances::Union{AbstractDistances,Nothing}
     path::Union{AbstractDistances,Nothing}
@@ -89,13 +89,13 @@ islinked(a, b) = b in links(a)
 
 function link!(a, b; reverse = true)
     push!(a.links, b)
-    if reverse link!(b, a, reverse = false) end
+    reverse && link!(b, a, reverse = false)
     return a
 end
 
 function unlink!(a, b; reverse = true)
     pop!(a.links, b)
-    if reverse unlink!(b, a, reverse = false) end
+    reverse && unlink!(b, a, reverse = false)
     return a
 end
 

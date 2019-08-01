@@ -23,6 +23,7 @@ export
     Distances,
     Grid,
     Maze,
+    
     aldousbroder!,
     binarytree!,
     deadends,
