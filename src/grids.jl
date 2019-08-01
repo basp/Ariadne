@@ -10,7 +10,7 @@ mutable struct Maze{T} <: AbstractMaze{T}
     path::Union{AbstractDistances,Nothing}
 end
 
-__cellmatrix(nrows, ncols) = [Cell(r, c) for r in 1:nrows, c in 1:ncols]
+cellmatrix(nrows, ncols) = [Cell(r, c) for r in 1:nrows, c in 1:ncols]
 
 Cell(rowidx, colidx) = Cell(rowidx, colidx, Set{Cell}())
 
