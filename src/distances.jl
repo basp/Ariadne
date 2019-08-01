@@ -12,6 +12,8 @@ function Distances(root::AbstractCell)
         for cell in frontier
             for link in links(cell)
                 if link in keys(cells)
+                    # We already explored the cell on the other
+                    # side of this link so let's just continue.
                     continue
                 end
                 cells[link] = cells[cell] + 1
