@@ -5,9 +5,9 @@ function binarytree!(g::AbstractGrid{:Γ})
         e = east(g, cell)
         isnothing(n) || push!(neighbors, n)
         isnothing(e) || push!(neighbors, e)
-        if length(neighbors) > 0
-            neighbor = rand(neighbors)
-            link!(cell, neighbor)
+        if !isempty(neighbors)
+            tgt = rand(neighbors)
+            link!(cell, tgt)
         end
     end
     return g
