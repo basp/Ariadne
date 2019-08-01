@@ -46,18 +46,10 @@ function topng(g::AbstractGrid{:Γ};
             else
                 sethue("black")
                 setline(1.5)
-                if isnothing(north(g, cell))
-                    line(Point(x1, y1), Point(x2, y1), :stroke)
-                end
-                if isnothing(west(g, cell))
-                    line(Point(x1, y1), Point(x1, y2), :stroke)
-                end
-                if !islinked(cell, east(g, cell))
-                    line(Point(x2, y1), Point(x2, y2), :stroke)
-                end
-                if !islinked(cell, south(g, cell))
-                    line(Point(x1, y2), Point(x2, y2), :stroke)
-                end
+                isnothing(north(g, cell)) && line(Point(x1, y1), Point(x2, y1), :stroke)
+                isnothing(west(g, cell)) && line(Point(x1, y1), Point(x1, y2), :stroke)
+                islinked(cell, east(g, cell)) || line(Point(x2, y1), Point(x2, y2), :stroke)
+                islinked(cell, south(g, cell)) || line(Point(x1, y2), Point(x2, y2), :stroke)
             end
         end
     end
