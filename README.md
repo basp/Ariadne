@@ -9,7 +9,7 @@ Since there's not really a definitive style guide for Julia, most of the code tr
 julia> f = (nrows, ncols) -> Grid(nrows, ncols) |>
        aldousbroder! |>
        Maze |>
-       m -> dijkstra!(m, m[1,1]) |>
+       m -> dijkstra!(m, rand(m)) |>
        totxt
 #26 (generic function with 1 method)
 
