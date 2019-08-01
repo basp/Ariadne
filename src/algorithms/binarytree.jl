@@ -1,8 +1,8 @@
-function binarytree!(g::AbstractGrid{:Γ})
-    for cell in g
+function binarytree!(G::AbstractGrid{:Γ})
+    for cell in G
         neighbors = Cell[]
-        n = north(g, cell)
-        e = east(g, cell)
+        n = north(G, cell)
+        e = east(G, cell)
         isnothing(n) || push!(neighbors, n)
         isnothing(e) || push!(neighbors, e)
         if !isempty(neighbors)
@@ -10,5 +10,5 @@ function binarytree!(g::AbstractGrid{:Γ})
             link!(cell, tgt)
         end
     end
-    return g
+    return G
 end

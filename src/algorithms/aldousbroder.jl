@@ -1,13 +1,13 @@
-function aldousbroder!(g::AbstractGrid)
-    cell = rand(g)
-    unvisited = count(!isnothing, g) - 1
+function aldousbroder!(G::AbstractGrid)
+    cell = rand(G)
+    unvisited = count(!isnothing, G) - 1
     while unvisited > 0
-        neighbor = rand(neighbors(g, cell))
+        neighbor = rand(neighbors(G, cell))
         if isempty(links(neighbor))
             link!(cell, neighbor)
             unvisited -= 1
         end
         cell = neighbor
     end
-    return g
+    return G
 end

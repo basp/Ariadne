@@ -22,8 +22,6 @@ export
     path,
     pathto,
     pathto!,
-    setdistances,
-    setpath,
     totxt
 
 abstract type AbstractCell end
