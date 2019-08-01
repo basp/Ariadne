@@ -1,3 +1,24 @@
+mutable struct PolarGrid <: AbstractGrid{:Θ}
+    rows::Vector{Vector{Cell}}
+    wrap::Bool
+end
+
+function PolarGrid(ncircles; wrap = true)
+    rows = [Cell[] for r in 1:ncircles]
+    rowheight = 1 / ncircles
+    rows[1] = [Cell(1, 1)]
+    for row in 2:ncircles
+        radius = (row - 1) / ncircles
+        circ = 2π * radius
+        prevcount = length(rows[row - 1])
+        cellwidth = circ / prevcount
+        ratio = round(Int, cellwidth / rowheight)
+        ncells = prevcount * ratio
+        rows[row] = [Cell(row, col) for col in 1:ncells]
+    end
+    return PolarGrid(rows, wrap)
+end
+
 iswrapped(G::AbstractGrid{:Θ}) = G.wrap
 
 rows(G::AbstractGrid{:Θ}) = G.rows

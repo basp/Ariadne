@@ -4,23 +4,6 @@ mutable struct Cell <: AbstractCell
     links::Set{Cell}
 end
 
-mutable struct Grid <: AbstractGrid{:Γ}
-    cells::Matrix{Cell}
-end
-
-mutable struct TriangleGrid <: AbstractGrid{:Δ}
-    cells::Matrix{Cell}
-end
-
-mutable struct HexGrid <: AbstractGrid{:Σ}
-    cells::Matrix{Cell}
-end
-
-mutable struct PolarGrid <: AbstractGrid{:Θ}
-    rows::Vector{Vector{Cell}}
-    wrap::Bool
-end
-
 mutable struct Maze{T} <: AbstractMaze{T}
     grid::AbstractGrid{T}
     distances::Union{AbstractDistances,Nothing}
@@ -30,28 +13,6 @@ end
 __cellmatrix(nrows, ncols) = [Cell(r, c) for r in 1:nrows, c in 1:ncols]
 
 Cell(rowidx, colidx) = Cell(rowidx, colidx, Set{Cell}())
-
-Grid(nrows, ncols) =  __cellmatrix(nrows, ncols) |> Grid                        
-
-TriangleGrid(nrows, ncols) = __cellmatrix(nrows, ncols) |> TriangleGrid
-
-HexGrid(nrows, ncols) = __cellmatrix(nrows, ncols) |> HexGrid
-
-function PolarGrid(ncircles; wrap = true)
-    rows = [Cell[] for r in 1:ncircles]
-    rowheight = 1 / ncircles
-    rows[1] = [Cell(1, 1)]
-    for row in 2:ncircles
-        radius = (row - 1) / ncircles
-        circ = 2π * radius
-        prevcount = length(rows[row - 1])
-        cellwidth = circ / prevcount
-        ratio = round(Int, cellwidth / rowheight)
-        ncells = prevcount * ratio
-        rows[row] = [Cell(row, col) for col in 1:ncells]
-    end
-    return PolarGrid(rows, wrap)
-end
 
 Maze(G) = Maze(G, nothing, nothing)
 
@@ -110,6 +71,7 @@ south(g, c) = g[rowidx(c) + 1, colidx(c)]
 west(g, c) = g[rowidx(c), colidx(c) - 1]
 east(g, c) = g[rowidx(c), colidx(c) + 1]
 
+include("./grids/delta.jl")
 include("./grids/gamma.jl")
-include("./grids/theta.jl")
 include("./grids/sigma.jl")
+include("./grids/theta.jl")
