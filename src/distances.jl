@@ -36,8 +36,21 @@ get(D::Distances, key, default) = get(cells(D), key, default)
 minimum(D::Distances) = first(findmin(cells(D)))
 maximum(D::Distances) = first(findmax(cells(D)))
 
+"""
+    dijkstra(root)
+
+Calculates a `Distances` value from the given root 
+cell to each other reachable cell. This is equivalent
+to invoking `Distances` directly.
+"""
 dijkstra(root) = root |> Distances
 
+"""
+    pathto(D, goal)
+
+Calculates a shortest path to a particular `goal` cell 
+using a precalculated `Distances` value.
+"""
 function pathto(D, goal)
     current = goal
     path = Distances(root(D), Dict{typeof(root(D)),Int}())
@@ -54,12 +67,24 @@ function pathto(D, goal)
     return path
 end
 
+"""
+    dijkstra(M, root)
+
+Calculates a `Distances` value from the given `root` cell
+and updates maze `M` accordingly.
+"""
 function dijkstra!(M, root)
     D = dijkstra(root)
     setdistances(M, D)
     return M
 end
 
+"""
+    pathto(M, D, goal)
+
+Calculates a `Distances` value representing the shortest
+path to given `goal` cell and updates maze `M` accordingly.
+"""
 function pathto!(M, D, goal)
     P = pathto(D, goal)
     setpath(M, P)
