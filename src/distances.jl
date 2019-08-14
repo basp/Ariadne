@@ -70,7 +70,7 @@ function pathto(D, goal)
 end
 
 """
-    dijkstra(M, root)
+    dijkstra!(M, root)
 
 Calculates a `Distances` value from the given `root` cell
 and updates maze `M` accordingly.
@@ -82,7 +82,7 @@ function dijkstra!(M, root)
 end
 
 """
-    pathto(M, D, goal)
+    pathto!(M, D, goal)
 
 Calculates a `Distances` value representing the shortest
 path to given `goal` cell and updates maze `M` accordingly.

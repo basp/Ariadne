@@ -45,7 +45,7 @@ function topng(g::AbstractGrid{:Γ};
                 rect(x1, y1, cellsize, cellsize, :stroke)
             else
                 sethue("black")
-                setline(1.5)
+                setline(1.0)
                 isnothing(north(g, cell)) && line(Point(x1, y1), Point(x2, y1), :stroke)
                 isnothing(west(g, cell)) && line(Point(x1, y1), Point(x1, y2), :stroke)
                 islinked(cell, east(g, cell)) || line(Point(x2, y1), Point(x2, y2), :stroke)
@@ -80,8 +80,8 @@ function totxt(g::AbstractGrid{:Γ})
         for cell in row
             body = "$(rendercontents(cell)) "
             corner = "+"
-            ebound = islinked(cell, east(g, cell)) ? " " : "|"
-            sbound = islinked(cell, south(g, cell)) ? "   " : "---"
+            ebound = ifelse(islinked(cell, east(g, cell)), " ", "|")
+            sbound = ifelse(islinked(cell, south(g, cell)), "   ", "---")
             top = join([top, body, ebound])
             bottom = join([bottom, sbound, corner])
         end
