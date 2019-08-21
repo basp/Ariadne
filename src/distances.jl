@@ -90,5 +90,11 @@ path to given `goal` cell and updates maze `M` accordingly.
 function pathto!(M, D, goal)
     P = pathto(D, goal)
     setpath(M, P)
-    return
+    return M
+end
+
+function pathto!(M, goal)
+    P = pathto(distances(M), goal)
+    setpath(M, P)
+    return M
 end
