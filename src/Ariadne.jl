@@ -318,13 +318,14 @@ function render(m;
     return m
 end
 
-const dim = 64
-test() = 
+function test() 
+    const dim = 64
     CartesianGrid(dim, dim) |> 
         Maze |> 
         binarytree! |>
         m -> dijkstra!(m, m[dim, dim ÷ 2]) |>
         m -> pathto!(m, m[dim, dim]) |>
         m -> render(m, cellsize = 16)
+end
 
 end # module
