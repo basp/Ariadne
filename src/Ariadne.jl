@@ -14,6 +14,7 @@ export link!, unlink!
 export distances, path
 export setdistances!, setpath!
 export north, south, west, east
+export entrance, getexit
 export neighbors
 export aldousbroder!
 export binarytree!
@@ -158,7 +159,7 @@ Base.getindex(m::Maze, row, col) = getindex(grid(m), row, col)
 grid(m) = m.grid
 distances(m) = m.distances
 entrance(m) = m.entrance
-exit(m) = m.exit
+getexit(m) = m.exit
 path(m) = m.path
 
 function setentrance!(m, e)
@@ -255,7 +256,7 @@ function _bgcolor(m::Maze, cell::Cell;
     if renderentrance && cell == entrance(m)
         return 1.0, 0.0, 0.0
     end
-    if renderexit && cell == exit(m)
+    if renderexit && cell == getexit(m)
         return 0.0, 1.0, 0.0
     end
     d = distances(m)
